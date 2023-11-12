@@ -1,0 +1,12 @@
+on:
+  repository_dispatch:
+    types: [frschool_e2e]
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          head_sha: ${{ github.event.client_payload.head_sha }}
+          github_token: ${{ github.event.client_payload.github_token }}
+        run: echo $head_sha && echo $github_token
