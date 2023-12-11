@@ -8,27 +8,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.client_payload.repository }}
           ref: ${{ github.event.client_payload.branch_name }}
           token: ${{ github.event.client_payload.github_token }}
+          path: 'frschool_source_code'
       - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
           cache: 'pnpm'
-          node-version-file: '.nvmrc'
-      - run: PUPPETEER_SKIP_DOWNLOAD=true pnpm install
+          node-version-file: 'frschool_source_code/.nvmrc'
+      - run: pnpm install
       - name: Install Playwright Browsers
-        run: pnpm --filter @frsource/frschool-elearning-web exec playwright install --with-deps
+        run: pnpm --filter frschool-e2e exec playwright install --with-deps
 
       - uses: cardinalby/export-env-action@v2
         with:
           expand: true
-          envFile: 'e-learning/.env.${{ github.event.client_payload.deploy_type }}'
+          envFile: 'frschool_source_code/e-learning/.env.${{ github.event.client_payload.deploy_type }}'
 
       - name: Run E2E tests
         id: e2e_tests
-        run: E2E_TARGET_URL=$CLIENT_BASE_URL pnpm e2e:ci:prod
+        run: E2E_TARGET_URL=$CLIENT_BASE_URL pnpm --filter frschool-e2e e2e:ci:prod
       - name: Update repo commit status
         if: ${{ success() || failure() }}
         run: |
@@ -37,12 +39,12 @@ jobs:
           -H "Authorization: token ${{ github.event.client_payload.github_token }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/${{ github.event.client_payload.repository }}/statuses/${{ github.event.client_payload.sha }} \
-          -d '{"state": "${{ steps.e2e_tests.outcome == 'success' && 'success' || 'failure' }}","context":"E2E tests","description":"Running E2E tests in the frs-testing repo","target_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
+          -d '{"state": "${{ steps.e2e_tests.outcome == 'success' && 'success' || 'failure' }}","context":"E2E tests ${{ github.event.client_payload.deploy_type }}","description":"Running E2E tests in the frs-testing repo","target_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
       
       - name: upload artifacts from playwright tests
         uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
           name: frschool-playwright-report
-          path: e-learning/web/playwright-report/
+          path: tests/frschool-e2e/playwright-report/
           retention-days: 14

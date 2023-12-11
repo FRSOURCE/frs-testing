@@ -1,0 +1,18 @@
+{
+  "name": "frschool-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "e2e": "playwright test --ui",
+    "e2e:headless": "playwright test",
+    "e2e:ci": "pnpm e2e:headless",
+    "e2e:ci:prod": "pnpm e2e:headless"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.1"
+  }
+}
