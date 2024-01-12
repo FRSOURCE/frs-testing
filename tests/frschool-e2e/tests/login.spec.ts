@@ -7,7 +7,7 @@ test('has login prompt', async ({ page }) => {
   await isNuxtHydrated(page);
 
   await page.getByTestId('pre-auth-login-button').click();
-  await expect(page.getByTestId('login-prompt')).toContainText('Zaloguj się!');
+  await expect(page.getByTestId('login-prompt')).toContainText('Zaloguj sięęęęęę!');
 
   await page.getByTestId('login-form-email').clear();
   await page.getByTestId('login-form-email').pressSequentially('test@test.pl');
