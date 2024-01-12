@@ -1,0 +1,30 @@
+on:
+  pull_request:
+    paths:
+      - 'tests/frschool-e2e/**'
+
+jobs:
+  run_tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+          node-version-file: '.nvmrc'
+      - run: pnpm install
+      - name: Install Playwright Browsers
+        run: pnpm --filter frschool-e2e exec playwright install --with-deps
+      - name: Run E2E tests
+        id: e2e_tests
+        run: E2E_TARGET_URL=https://stage.frschool.pl pnpm --filter frschool-e2e e2e:ci:prod
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ !cancelled() }}
+        with:
+          name: frschool-playwright-report
+          path: tests/frschool-e2e/playwright-report/
+          retention-days: 14
