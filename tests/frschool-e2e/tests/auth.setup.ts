@@ -33,7 +33,7 @@ test("has login prompt", async ({ page }) => {
   await isNuxtHydrated(page);
 
   await page.getByTestId("pre-auth-login-button").click();
-  await expect(page.getByTestId("login-prompt")).toContainText("Zaloguj się!");
+  page.getByRole("heading", { name: "Zaloguj się!", level: 1 });
 
   await handleLoginForm({
     page,
