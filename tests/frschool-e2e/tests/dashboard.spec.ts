@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { isNuxtHydrated, testAsRole } from "../test-utils/utils";
+import { isNuxtHydrated, setTestRole } from "../test-utils/utils";
 
-testAsRole("user");
+setTestRole("user");
 
 test("on dashboard page renders dashboard container", async ({ page }) => {
   await page.goto("/dashboard");
@@ -11,7 +11,7 @@ test("on dashboard page renders dashboard container", async ({ page }) => {
 });
 
 test.describe("when logged in as admin", () => {
-  testAsRole("admin");
+  setTestRole("admin");
 
   test("on dashboard page renders admin navigation button", async ({
     page,

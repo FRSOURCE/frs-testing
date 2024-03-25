@@ -3,7 +3,7 @@ import test, { Page, expect } from "@playwright/test";
 export const AUTH_FILE_PATH = "playwright/.auth/user.json" as const;
 export const AUTH_ADMIN_FILE_PATH = "playwright/.auth/admin.json" as const;
 
-export const testAsRole = (role: "user" | "admin" | "guest") => {
+export const setTestRole = (role: "user" | "admin" | "guest") => {
   if (role === "guest") {
     return test.use({ storageState: { cookies: [], origins: [] } });
   }
