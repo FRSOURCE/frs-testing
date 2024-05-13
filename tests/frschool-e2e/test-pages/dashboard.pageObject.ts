@@ -32,8 +32,8 @@ export class DashboardPage extends BasePage {
 
 export const dashboardTest = base.extend<{ dashboardPage: DashboardPage }>({
   dashboardPage: async ({ page }, use) => {
-    const dashboardPage = new DashboardPage(page);
-    await dashboardPage.goto();
-    await use(dashboardPage);
+    const pageObject = new DashboardPage(page);
+    await pageObject.goto();
+    await use(pageObject);
   },
 });

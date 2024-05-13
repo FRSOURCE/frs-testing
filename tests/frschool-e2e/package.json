@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@axe-core/playwright": "^4.9.0",
     "@playwright/test": "^1.40.1"
   }
 }
