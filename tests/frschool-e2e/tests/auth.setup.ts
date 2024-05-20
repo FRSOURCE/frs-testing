@@ -1,11 +1,8 @@
-import { test, expect } from "@playwright/test";
-import {
-  isNuxtHydrated,
-  handleLoginForm,
-  login,
-  AUTH_FILE_PATH,
-  AUTH_ADMIN_FILE_PATH,
-} from "../test-utils/utils";
+import { test as base, expect } from "@playwright/test";
+import { AUTH_FILE_PATH, AUTH_ADMIN_FILE_PATH } from "../test-utils/utils";
+import { LoginPage } from "../test-pages/login.pageObject";
+import { HomePage } from "../test-pages/home.pageObject";
+import { DashboardPage } from "../test-pages/dashboard.pageObject";
 
 const skipIfAuthCookieValid = async (authFilePath: string) => {
   const authFile = await import(`../${authFilePath}`).catch(() => {});
@@ -25,34 +22,48 @@ const skipIfAuthCookieValid = async (authFilePath: string) => {
   );
 };
 
-test("has login prompt", async ({ page }) => {
+const test = base.extend<{
+  loginPage: LoginPage;
+  homePage: HomePage;
+  dashboardPage: DashboardPage;
+}>({
+  loginPage: ({ page }, use) => use(new LoginPage(page)),
+  homePage: async ({ page }, use) => {
+    const homePage = new HomePage(page);
+    await homePage.goto();
+    await use(homePage);
+  },
+  dashboardPage: ({ page }, use) => use(new DashboardPage(page)),
+});
+
+test("has login prompt", async ({
+  page,
+  homePage,
+  loginPage,
+  dashboardPage,
+}) => {
   await skipIfAuthCookieValid(AUTH_FILE_PATH);
+  await homePage.loginNavigationLinkClick();
 
-  await page.goto("/");
-
-  await isNuxtHydrated(page);
-
-  await page.getByTestId("pre-auth-login-button").click();
-  await expect(
-    page.getByRole("heading", { name: "Zaloguj się!", level: 1 })
-  ).toBeVisible();
-
-  await handleLoginForm({
-    page,
+  await loginPage.expectHeadingToContain("Zaloguj się!");
+  await loginPage.handleLogin({
     login: "test@test.pl",
     password: "testtest",
   });
 
-  await expect(page.getByTestId("dashboard")).toBeVisible();
+  await dashboardPage.expectContentToBeVisible();
 
   await page.context().storageState({ path: AUTH_FILE_PATH });
 });
 
 test.describe("when logging in as an admin", () => {
-  test("has login prompt", async ({ page }) => {
+  test("has login prompt", async ({ page, loginPage }) => {
     await skipIfAuthCookieValid(AUTH_ADMIN_FILE_PATH);
-
-    await login({ page, login: "admin@admin.pl", password: "testtest" });
+    await loginPage.goto();
+    await loginPage.handleLogin({
+      login: "admin@admin.pl",
+      password: "testtest",
+    });
 
     await expect(page).toHaveURL(/.*\/admin\/dashboard/);
 
