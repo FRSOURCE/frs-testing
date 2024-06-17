@@ -10,11 +10,23 @@ importers:
 
   tests/frschool-e2e:
     devDependencies:
+      '@axe-core/playwright':
+        specifier: ^4.9.0
+        version: 4.9.0(playwright-core@1.40.1)
       '@playwright/test':
         specifier: ^1.40.1
         version: 1.40.1
 
 packages:
+
+  /@axe-core/playwright@4.9.0(playwright-core@1.40.1):
+    resolution: {integrity: sha512-Q1Lz75dNsX38jof+aev7RficDMdH/HLOLySkDdXR0fUoeFcLdw4UNgDO2CNNP4CTpoesEdfYRdd6VmDXjhBgbA==}
+    peerDependencies:
+      playwright-core: '>= 1.0.0'
+    dependencies:
+      axe-core: 4.9.0
+      playwright-core: 1.40.1
+    dev: true
 
   /@playwright/test@1.40.1:
     resolution: {integrity: sha512-EaaawMTOeEItCRvfmkI9v6rBkF1svM8wjl/YPRrg2N2Wmp+4qJYkWtJsbew1szfKKDm6fPLy4YAanBhIlf9dWw==}
@@ -22,6 +34,11 @@ packages:
     hasBin: true
     dependencies:
       playwright: 1.40.1
+    dev: true
+
+  /axe-core@4.9.0:
+    resolution: {integrity: sha512-H5orY+M2Fr56DWmMFpMrq5Ge93qjNdPVqzBv5gWK3aD1OvjBEJlEzxf09z93dGVQeI0LiW+aCMIx1QtShC/zUw==}
+    engines: {node: '>=4'}
     dev: true
 
   /fsevents@2.3.2:
