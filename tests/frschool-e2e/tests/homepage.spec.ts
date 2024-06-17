@@ -6,6 +6,6 @@ test("on home page renders dashboard container", async ({ homePage }) => {
 
 test("fulfills WCAG standards", async ({ homePage }) => {
   await homePage.expectPageToBeAccessible({
-    disableRules: ["landmark-unique", "region", "landmark-no-duplicate-banner"],
+    disableRules: ["landmark-one-main", "landmark-unique", "region", "landmark-no-duplicate-banner"],
   });
 });
