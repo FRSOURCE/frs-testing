@@ -43,7 +43,7 @@ jobs:
           -d '{"state": "${{ steps.e2e_tests.outcome == 'success' && 'success' || 'failure' }}","context":"E2E tests ${{ github.event.client_payload.deploy_type }}","description":"Running E2E tests in the frs-testing repo","target_url":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'
       
       - name: upload artifacts from playwright tests
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ success() || failure() }}
         with:
           name: frschool-playwright-report

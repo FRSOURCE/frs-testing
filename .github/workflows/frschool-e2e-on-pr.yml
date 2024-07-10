@@ -22,7 +22,7 @@ jobs:
         id: e2e_tests
         run: E2E_TARGET_URL=https://stage.frschool.pl pnpm --filter frschool-e2e e2e:ci:prod
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: frschool-playwright-report
