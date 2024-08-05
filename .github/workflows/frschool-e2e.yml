@@ -18,6 +18,8 @@ jobs:
           token: ${{ github.event.client_payload.github_token }}
           path: 'frschool_source_code'
       - uses: pnpm/action-setup@v2
+        with:
+          package_json_file: frs_testing/package.json
       - uses: actions/setup-node@v3
         with:
           cache: 'pnpm'
