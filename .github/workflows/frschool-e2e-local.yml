@@ -41,6 +41,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: 'pnpm'
+          cache-dependency-path: |
+            frs_testing/pnpm-lock.yaml
+            frschool_source_code/pnpm-lock.yaml
           node-version-file: 'frschool_source_code/.nvmrc'
       - run: pnpm install
         working-directory: ./frs_testing
