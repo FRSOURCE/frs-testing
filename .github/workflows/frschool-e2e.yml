@@ -17,9 +17,16 @@ jobs:
           ref: ${{ github.event.client_payload.branch_name }}
           token: ${{ github.event.client_payload.github_token }}
           path: 'frschool_source_code'
+      - name: Choose PNPM version
+        id: pnpm_version
+        run: |
+          frs_testing_pnpm_version=$(cat frs_testing/package.json | jq -r ".packageManager" | cut -d "@" -f2);
+          frschool_source_pnpm_version=$(cat frschool_source_code/package.json | jq -r ".packageManager" | cut -d "@" -f2);
+          chosen_pnpm_version=$(printf '%s\n' "$frs_testing_pnpm_version" "$frschool_source_pnpm_version" | sort -V | tail -1);
+          echo "version=$(echo $chosen_pnpm_version)" >> $GITHUB_OUTPUT
       - uses: pnpm/action-setup@v2
         with:
-          package_json_file: frs_testing/package.json
+          version: ${{ steps.pnpm_version.outputs.version }}
       - uses: actions/setup-node@v3
         with:
           cache: 'pnpm'
