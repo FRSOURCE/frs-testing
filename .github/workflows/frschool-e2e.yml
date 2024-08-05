@@ -9,6 +9,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: 'frs_testing'
       - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.client_payload.repository }}
@@ -21,8 +23,10 @@ jobs:
           cache: 'pnpm'
           node-version-file: 'frschool_source_code/.nvmrc'
       - run: pnpm install
+        working-directory: ./frs_testing
       - name: Install Playwright Browsers
         run: pnpm --filter frschool-e2e exec playwright install --with-deps
+        working-directory: ./frs_testing
 
       - uses: cardinalby/export-env-action@v2
         with:
@@ -32,6 +36,7 @@ jobs:
       - name: Run E2E tests
         id: e2e_tests
         run: E2E_TARGET_URL=$CLIENT_BASE_URL pnpm --filter frschool-e2e e2e:ci:prod
+        working-directory: ./frs_testing
       - name: Update repo commit status
         if: ${{ success() || failure() }}
         run: |
@@ -47,5 +52,5 @@ jobs:
         if: ${{ success() || failure() }}
         with:
           name: frschool-playwright-report
-          path: tests/frschool-e2e/playwright-report/
+          path: frs_testing/tests/frschool-e2e/playwright-report/
           retention-days: 14
