@@ -15,7 +15,7 @@ const getWebServerConfig = (): PlaywrightTestConfig["webServer"] => {
     return [
       {
         command: [
-          "cd ../../frschool_source_code",
+          "cd ../../../frschool_source_code",
           "pnpm --filter @frsource/frschool-api prisma:generate:prod",
           "pnpm --filter @frsource/frschool-api db:migration:reset --force --skip-generate",
           "pnpm --filter @frsource/frschool-api api:dev",
@@ -27,7 +27,7 @@ const getWebServerConfig = (): PlaywrightTestConfig["webServer"] => {
       },
       {
         command: [
-          "cd ../../frschool_source_code",
+          "cd ../../../frschool_source_code",
           "pnpm --filter @frsource/frschool-elearning-web dev",
         ].join(" && "),
         url: "http://localhost:3000",
