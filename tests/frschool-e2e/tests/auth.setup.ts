@@ -45,7 +45,7 @@ test("has login prompt", async ({
   await skipIfAuthCookieValid(AUTH_FILE_PATH);
   await homePage.loginNavigationLinkClick();
 
-  await loginPage.expectHeadingToContain("Zaloguj się!");
+  await loginPage.expectHeadingToContain("Log in!");
   await loginPage.handleLogin({
     login: "test@test.pl",
     password: "testtest",
